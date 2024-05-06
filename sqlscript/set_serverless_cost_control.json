@@ -1,8 +1,11 @@
 {
 	"name": "set_serverless_cost_control",
 	"properties": {
+		"folder": {
+			"name": "utils"
+		},
 		"content": {
-			"query": "select * from sys.dm_external_data_processed;\n\nselect * from sys.configurations\nwhere name like 'Data Processed %';\n\nsp_set_data_processed_limit\n    @type = N'monthly',\n    @limit_tb = 2;\n\nsp_set_data_processed_limit\n    @type = N'weekly',\n    @limit_tb = 1;\n\nsp_set_data_processed_limit\n    @type = N'daily',\n    @limit_tb = 1;",
+			"query": "--to check usage of serverless sql pull till date\nselect * from sys.dm_external_data_processed;\n\n--to check the current settings of limits\nselect * from sys.configurations\nwhere name like 'Data Processed %';\n\n--to set the sql serverless pull limit  \n--option 1- go to manage click cost control icon next to built-in and set the limits \n--option 2- by using stored procedure we can set the limit as follows\n\nsp_set_data_processed_limit\n    @type = N'monthly',\n    @limit_tb = 1;\n\nsp_set_data_processed_limit\n    @type = N'weekly',\n    @limit_tb = 1;\n\nsp_set_data_processed_limit\n    @type = N'daily',\n    @limit_tb = 1;",
 			"metadata": {
 				"language": "sql"
 			},
