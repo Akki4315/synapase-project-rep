@@ -1,9 +1,9 @@
 {
-	"name": "synapse-project-ws-WorkspaceDefaultStorage",
+	"name": "synapse-ws4315-WorkspaceDefaultStorage",
 	"type": "Microsoft.Synapse/workspaces/linkedservices",
 	"properties": {
 		"typeProperties": {
-			"url": "https://synapseaadlsgen2sa.dfs.core.windows.net"
+			"url": "https://synapsegen2sa.dfs.core.windows.net"
 		},
 		"type": "AzureBlobFS",
 		"connectVia": {
