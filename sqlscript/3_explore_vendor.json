@@ -1,0 +1,20 @@
+{
+	"name": "3_explore_vendor",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/discovery"
+		},
+		"content": {
+			"query": "--select database\nuse nyc_taxi_discovery;\n\n--read the csv file which contain escaped char (\\)\nSELECT * \n  FROM OPENROWSET(\n    BULK  'vendor_escaped.csv',\n    DATA_SOURCE = 'nyc_taxi_data_raw',\n    FORMAT = 'csv',\n    PARSER_VERSION = '2.0',\n    HEADER_ROW = TRUE,\n    ESCAPECHAR = '\\\\'   --need to mentioned escaped charactor for string identification (\\) itself as escaped char hence need to provide (\\\\)\n  ) as vendor;\n\n--read the csv file which contain double quote charactor\nSELECT * \n  FROM OPENROWSET(\n    BULK  'vendor.csv',\n    DATA_SOURCE = 'nyc_taxi_data_raw',\n    FORMAT = 'csv',\n    PARSER_VERSION = '2.0',\n    HEADER_ROW = TRUE\n    --FIELDQUOTE = '\"' --bydefault fieldquote is \"\" hence no need to mentioned in select query.\n  ) as vendor;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_discovery",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
