@@ -5,7 +5,7 @@
 			"name": "nyc_taxi/ldw"
 		},
 		"content": {
-			"query": "USE master\nGO                                  --we can use GO instead of ; to make statement end\n\nCREATE DATABASE nyc_taxi_ldw        --ldw(logical data warehouse)\nGO\n\nUSE nyc_taxi_ldw\nGO\n\nCREATE SCHEMA bronze;\nCREATE SCHEMA silver;\nCREATE SCHEMA gold;\n\n\n",
+			"query": "USE master\nGO                                  --we can use GO instead of ; to make statement end\n\nCREATE DATABASE nyc_taxi_ldw        --ldw(logical data warehouse)\nGO\n\nUSE nyc_taxi_ldw\nGO\n\nCREATE SCHEMA bronze;\nCREATE SCHEMA silver;\nCREATE SCHEMA gold;\n\nALTER DATABASE nyc_taxi_ldw COLLATE Latin1_General_100_CI_AI_SC_UTF8;\n\n",
 			"metadata": {
 				"language": "sql"
 			},
