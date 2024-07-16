@@ -1,0 +1,20 @@
+{
+	"name": "1_create_databases",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/ldw"
+		},
+		"content": {
+			"query": "USE master\nGO                                  --we can use GO instead of ; to make statement end\n\nCREATE DATABASE nyc_taxi_ldw        --ldw(logical data warehouse)\nGO\n\nUSE nyc_taxi_ldw\nGO\n\nCREATE SCHEMA bronze;\nCREATE SCHEMA silver;\nCREATE SCHEMA gold;\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_ldw",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

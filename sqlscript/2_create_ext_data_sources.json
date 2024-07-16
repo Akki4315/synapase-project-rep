@@ -1,0 +1,20 @@
+{
+	"name": "2_create_ext_data_sources",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/ldw"
+		},
+		"content": {
+			"query": "USE nyc_taxi_ldw;\n\nCREATE EXTERNAL DATA SOURCE nyc_taxi_src\nWITH\n(   LOCATION = 'https://synapsegen2sa.dfs.core.windows.net/nyc-taxi-data' --location path = go storage account->container-> click ...->properties->copy URL \n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_ldw",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
