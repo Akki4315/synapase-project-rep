@@ -1,0 +1,20 @@
+{
+	"name": "9_create_silver_trip_data_green",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/ldw"
+		},
+		"content": {
+			"query": "USE nyc_taxi_ldw;\n\n--create external trip_data_green table using CETAS statement\nIF OBJECT_ID('silver.trip_data_green') is NOT NULL\nDROP EXTERNAL TABLE silver.trip_data_green;\n\nCREATE EXTERNAL TABLE silver.trip_data_green\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/trip_data_green',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nselect * \nFROM bronze.trip_data_green;\n\nselect * from silver.trip_data_green;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_ldw",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

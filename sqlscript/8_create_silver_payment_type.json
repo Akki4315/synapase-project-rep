@@ -1,0 +1,20 @@
+{
+	"name": "8_create_silver_payment_type",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/ldw"
+		},
+		"content": {
+			"query": "USE nyc_taxi_ldw;\n\n--create external payment_type table using CETAS statement\nIF OBJECT_ID('silver.payment_type') is NOT NULL\nDROP EXTERNAL TABLE silver.payment_type;\n\nCREATE EXTERNAL TABLE silver.payment_type\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/payment_type',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nSELECT payment_type, description\n  FROM OPENROWSET(\n    BULK  'raw/payment_type.json',\n    DATA_SOURCE = 'nyc_taxi_src',\n    FORMAT = 'csv',\n    FIELDTERMINATOR = '0x0b', \n    FIELDQUOTE = '0x0b'\n  )WITH (\n    jsonDoc NVARCHAR(max)\n  )as payment_type\n  CROSS APPLY openjson(jsonDoc)\n  WITH(\n    payment_type SMALLINT,\n    description VARCHAR(15) '$.payment_type_desc');\n\nselect * from silver.payment_type;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_ldw",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
