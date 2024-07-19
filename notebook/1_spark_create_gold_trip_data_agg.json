@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f9ef86b4-8427-4768-a4a5-e17fc60de1dc"
+				"spark.autotune.trackingId": "a32818ca-99b1-4d3a-b807-bc9e3afff6c7"
 			}
 		},
 		"metadata": {
@@ -78,7 +78,7 @@
 					"silver_folder_path = 'abfss://nyc-taxi-data@synapsegen2sa.dfs.core.windows.net/silver'\r\n",
 					"gold_folder_path = 'abfss://nyc-taxi-data@synapsegen2sa.dfs.core.windows.net/gold'"
 				],
-				"execution_count": 2
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -97,7 +97,7 @@
 					"#to disable auto inferschema by setting the configuration is false\r\n",
 					"spark.conf.set(\"spark.sql.sources.partitionColumnTypeInference.enabled\", \"false\")"
 				],
-				"execution_count": 2
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -142,7 +142,7 @@
 					"\r\n",
 					"#display(trip_data_green_df)"
 				],
-				"execution_count": 1
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -165,7 +165,7 @@
 					"                        .agg(count(lit(1)).alias(\"total_trip_count\"),\r\n",
 					"                            round(sum(\"fare_amount\"),2).alias(\"total_fare_amount\"))"
 				],
-				"execution_count": 11
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
