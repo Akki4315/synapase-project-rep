@@ -60,7 +60,7 @@
 						"referenceName": "pl_create_gold_data_green",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": false
+					"waitOnCompletion": true
 				}
 			}
 		],
