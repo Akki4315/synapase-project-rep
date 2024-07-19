@@ -8,6 +8,15 @@
 		"synapse-ws4315-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:synapse-ws4315.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
+		"ls_serverless_sql_pool_db_nyx_taxi_ldw_properties_typeProperties_server": {
+			"value": "tcp:synapse-ws4315-ondemand.sql.azuresynapse.net,1433"
+		},
+		"ls_serverless_sql_pool_db_nyx_taxi_ldw_properties_typeProperties_database": {
+			"value": "nyc_taxi_ldw"
+		},
+		"ls_synapsegen2sa_properties_typeProperties_url": {
+			"value": "https://synapsegen2sa.dfs.core.windows.net/"
+		},
 		"synapse-ws4315-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://synapsegen2sa.dfs.core.windows.net"
 		}
