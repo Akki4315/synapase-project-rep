@@ -1,0 +1,20 @@
+{
+	"name": "9_explore_trip_data_green_delta",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/discovery"
+		},
+		"content": {
+			"query": "USE nyc_taxi_discovery;\n\n--query the delta log data\n\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) AS [result]\n\n\n/* Notes: \n1. in delta format file we query only on main folder which contain delta log folder. we can't query on partioning folder as we queried in parquet or csv format.\n2. when we query on delta file it will create partition folder column additionally which we can use in where clause to filterout the data. \n3. we can't query on old version data in synapse.\n*/\n\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/year=2020/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) AS [result]           -- it will throw error because we can't query on partioning folder data as delta log folder is not present inside the partitioning folder.\n\n--identify the interred datatypes\nEXEC sp_describe_first_result_set N'SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK ''trip_data_green_delta/'',\n        DATA_SOURCE = ''nyc_taxi_data_raw'',\n        FORMAT = ''DELTA''\n    ) AS [result]'          \n\n-- we can define the schema manually which we did previously.\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) WITH(\n        vendor_id INT 1,\n        lpep_pickup_datetime DATETIME2(7),\n        lpep_dropoff_datetime DATETIME2(7),\n        store_and_fwd_flag CHAR(1),\n        rate_code_id INT 5,\n        pu_location_id INT 6,\n        do_location_id INT 7,\n        passenger_count INT,\n        trip_distance FLOAT,\n        fare_amount FLOAT,\n        extra FLOAT,\n        mta_tax FLOAT,\n        tip_amount FLOAT,\n        tolls_amount FLOAT,\n        ehail_fee INT,\n        improvement_surcharge FLOAT, \n        total_amount FLOAT,\n        payment_type INT,\n        trip_type INT,\n        congestion_surcharge FLOAT,\n        year VARCHAR(4),\n        month VARCHAR(2)\n    )AS [result]\n\n-- Note: partitioning data columns must be present while quering limited number of columns. if partioning data column won't provide then it will throw an error. \nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) WITH(\n        tip_amount FLOAT,\n        trip_type INT,\n        year VARCHAR(4),\n        month VARCHAR(2)\n    )AS [result]\n\n--fetching the data based on partitioning\nSELECT COUNT(distinct payment_type)\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) AS [result]       -- whole data is being scanned (4 mb)\n\nSELECT COUNT(distinct payment_type)\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_delta/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'DELTA'\n    ) AS [result]\nwhere year = '2020' and month = '01'; -- only where clause mentioned data scan(< 1 mb) ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_discovery",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

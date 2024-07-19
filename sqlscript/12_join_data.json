@@ -1,0 +1,20 @@
+{
+	"name": "12_join_data",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/discovery"
+		},
+		"content": {
+			"query": "use nyc_taxi_discovery;\n\n--identify the no of trip made from each borough\n\n--check wether location id contains any null value or not\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_parquet/year=2020/month=01/*.parquet',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'PARQUET'\n    )AS trip_data\nwhere PULocationID is null;\n\n--check wether location id contains any null value or not\nSELECT *\nFROM\n    OPENROWSET(\n        BULK 'abfss://nyc-taxi-data@synapsegen2sa.dfs.core.windows.net/raw/taxi_zone.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS taxi_zone\nwhere locationID is null;\n\n--joining to dataset using openrowset function \n\nSELECT Borough, count(1) as no_of_trips\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_parquet/year=2020/month=01/*.parquet',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'PARQUET'\n    )AS trip_data\nJOIN\n    OPENROWSET(\n        BULK 'abfss://nyc-taxi-data@synapsegen2sa.dfs.core.windows.net/raw/taxi_zone.csv'\n,\n        FORMAT = 'CSV',\n        PARSER_VERSION = '2.0',\n        HEADER_ROW = TRUE\n    ) AS taxi_zone\nON trip_data.PULocationID = taxi_zone.LocationID\nGROUP BY Borough\norder BY no_of_trips;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_discovery",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

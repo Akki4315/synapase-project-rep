@@ -1,0 +1,20 @@
+{
+	"name": "11_data_quality_check",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/discovery"
+		},
+		"content": {
+			"query": "USE nyc_taxi_discovery;\n\n--Identify the data quality issues in trip total amount\nSELECT\n    min(total_amount) as min_total_amt,\n    max(total_amount) as max_total_amt,\n    avg(total_amount) as avg_total_amt,\n    count(1) as total_no_of_records,\n    count(total_amount) as not_null_total_no_of_records\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_parquet/year=2020/month=01/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'PARQUET'\n    ) AS trip_data;         --found negative amount in total_amount column\n\n--check for the negative amount\nSELECT\n    * \nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_parquet/year=2020/month=01/',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'PARQUET'\n    ) AS trip_data\nwhere total_amount < 0;     --negative amount payment type found 3-No charge and 4-Dispute\n\n--check for the count of each payment_type \nSELECT\n    payment_type, count(1) as no_of_records\nFROM\n    OPENROWSET(\n        BULK 'trip_data_green_parquet/year=*/month=*/*.parquet',\n        DATA_SOURCE = 'nyc_taxi_data_raw',\n        FORMAT = 'PARQUET'\n    ) AS trip_data\n--where total_amount < 0\nGROUP BY payment_type\nORDER BY payment_type;     --payment type Null found. that we could replace with 5-unknown during further analysis.(depend on the requirement)\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_discovery",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

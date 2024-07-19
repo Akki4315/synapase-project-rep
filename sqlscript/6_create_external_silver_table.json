@@ -1,0 +1,20 @@
+{
+	"name": "6_create_external_silver_table",
+	"properties": {
+		"folder": {
+			"name": "nyc_taxi/ldw"
+		},
+		"content": {
+			"query": "USE nyc_taxi_ldw;\n\n--create external taxi_zone table using CETAS statement\nIF OBJECT_ID('silver.taxi_zone') is NOT NULL\nDROP EXTERNAL TABLE silver.taxi_zone;\n\nCREATE EXTERNAL TABLE silver.taxi_zone\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/taxi_zone',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nselect * \nFROM bronze.taxi_zone;\n\nselect * from silver.taxi_zone;\n\n--create external calendar table using CETAS statement\nIF OBJECT_ID('silver.calendar') is NOT NULL\nDROP EXTERNAL TABLE silver.calendar;\n\nCREATE EXTERNAL TABLE silver.calendar\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/calendar',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nselect * \nFROM bronze.calendar;\n\nselect * from silver.calendar;\n\n--create external vendor table using CETAS statement\nIF OBJECT_ID('silver.vendor') is NOT NULL\nDROP EXTERNAL TABLE silver.vendor;\n\nCREATE EXTERNAL TABLE silver.vendor\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/vendor',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nselect * \nFROM bronze.vendor;\n\nselect * from silver.vendor;\n\n--create external trip_type table using CETAS statement\nIF OBJECT_ID('silver.trip_type') is NOT NULL\nDROP EXTERNAL TABLE silver.trip_type;\n\nCREATE EXTERNAL TABLE silver.trip_type\nWITH(\n    DATA_SOURCE = nyc_taxi_src,\n    LOCATION = 'silver/trip_type',\n    FILE_FORMAT = parquet_file_format\n)\nAS\nselect * \nFROM bronze.trip_type;\n\nselect * from silver.trip_type;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_taxi_ldw",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
