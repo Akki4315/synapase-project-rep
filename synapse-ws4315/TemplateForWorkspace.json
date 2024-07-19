@@ -738,7 +738,7 @@
 								"referenceName": "pl_create_gold_data_green",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": false,
+							"waitOnCompletion": true,
 							"parameters": {}
 						}
 					}
@@ -1733,6 +1733,37 @@
 				"type": "SqlQuery"
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/tr_load_nyc_taxi_data')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_execute_all_pipeline",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 5,
+						"startTime": "2024-07-19T05:40:00",
+						"endTime": "2024-07-19T05:52:00",
+						"timeZone": "India Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/pl_execute_all_pipeline')]"
+			]
 		}
 	]
 }
